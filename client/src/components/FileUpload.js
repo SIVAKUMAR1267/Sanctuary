@@ -1,20 +1,23 @@
 import React, { useState, useRef } from 'react';
 import axios from 'axios';
+import { Lock } from 'lucide-react';
 import { startEncryptionSession, encryptChunk, calculateFileHash } from '../utils/encryption';
 import { Button } from '../ui/Button';
 import { Card } from '../ui/Card';
 
-const FileUpload = ({ token, refreshFiles }) => {
+const FileUpload = ({ token, refreshFiles, isConnected }) => {
+  // 1. STATE VARIABLES (These were missing in your file!)
   const [selectedFile, setSelectedFile] = useState(null);
   const [status, setStatus] = useState(""); 
   const [uploadProgress, setUploadProgress] = useState(0);
   const [uploadState, setUploadState] = useState("IDLE"); 
-
+  
   const isPaused = useRef(false);
   const isCancelled = useRef(false);
   const currentChunkRef = useRef(0);
   const cryptoData = useRef(null);
 
+  // 2. HELPER FUNCTIONS (These were also missing!)
   const handleFileSelect = (e) => {
     if (e.target.files && e.target.files[0]) {
       setSelectedFile(e.target.files[0]);
@@ -28,22 +31,25 @@ const FileUpload = ({ token, refreshFiles }) => {
     }
   };
 
-  const initUpload = async () => { /* ... existing exact logic ... */
+  const initUpload = async () => {
     isPaused.current = false;
     isCancelled.current = false;
     try {
       if (currentChunkRef.current === 0) {
         setStatus("🔍 Scanning the elements...");
         setUploadState("SCANNING");
-        const fileHash = await calculateFileHash(selectedFile);
+        
         try {
-          const scanRes = await axios.post('http://localhost:5000/scan-file', { fileHash });
+          const fileHash = await calculateFileHash(selectedFile);
+          const scanRes = await axios.post('http://localhost:5000/scan-file', { fileHash }, {
+            headers: { Authorization: `Bearer ${token}` }
+          });
           if (scanRes.data.data?.attributes?.last_analysis_stats?.malicious > 0) {
               setStatus("❌ Upload Blocked: Impurity Detected");
               setUploadState("IDLE");
               return alert("❌ DANGER: Virus Detected!");
           }
-        } catch (e) { console.warn("Virus scan skipped."); }
+        } catch (e) { console.warn("Virus scan skipped or failed."); }
 
         setStatus("🔐 Weaving encryption...");
         cryptoData.current = await startEncryptionSession();
@@ -55,7 +61,7 @@ const FileUpload = ({ token, refreshFiles }) => {
     }
   };
 
-  const processUploadLoop = async () => { /* ... existing exact logic ... */
+  const processUploadLoop = async () => {
     setUploadState("UPLOADING");
     setStatus(currentChunkRef.current > 0 ? "🚀 Resuming journey..." : "🚀 Uploading securely...");
     const CHUNK_SIZE = 5 * 1024 * 1024; 
@@ -97,7 +103,7 @@ const FileUpload = ({ token, refreshFiles }) => {
         setUploadProgress(Math.round((currentChunkRef.current / totalChunks) * 100));
       }
 
-      setStatus("✨ Planted safely!");
+      setStatus("✨ Planted safely in your Drive!");
       setUploadState("IDLE");
       setSelectedFile(null);
       setUploadProgress(0);
@@ -114,8 +120,26 @@ const FileUpload = ({ token, refreshFiles }) => {
   const handleResume = () => { isPaused.current = false; processUploadLoop(); };
   const handleCancel = () => { isCancelled.current = true; };
 
+  // 3. THE LOCK GUARD CLAUSE
+  if (!isConnected) {
+    return (
+      <Card className="mb-12 relative overflow-hidden bg-muted/20 border-border/40">
+        <div className="flex flex-col items-center justify-center p-10 text-center relative z-10">
+          <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mb-6 shadow-inner">
+            <Lock size={32} className="text-muted-foreground" />
+          </div>
+          <h3 className="text-2xl font-serif text-foreground mb-3">Sanctuary Locked</h3>
+          <p className="text-muted-foreground font-sans max-w-md mx-auto leading-relaxed">
+            We refuse to store your files on our servers. Please connect your Google Drive canopy above to unlock uploads and take true ownership of your data.
+          </p>
+        </div>
+      </Card>
+    );
+  }
+
+  // 4. THE MAIN RENDER UI
   return (
-    <Card className="mb-12">
+    <Card className="mb-12 relative overflow-visible z-10">
       <div className="flex flex-col items-center justify-center p-6 border-2 border-dashed border-border/60 bg-muted/30 rounded-[2rem] hover:border-primary/50 transition-all duration-500 text-center relative overflow-hidden group">
         <h3 className="text-2xl font-serif text-foreground mb-4">Store a New Memory</h3>
         

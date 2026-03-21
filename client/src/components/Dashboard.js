@@ -1,26 +1,38 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
 import FileUpload from './FileUpload';
+import StorageConnections from './StorageConnections';
+import KeyManager from './Keymanager';
 import { decryptFile, setupLocalRSAKeys } from '../utils/encryption';
 import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
-import KeyManager from './Keymanager';
 
 const Dashboard = ({ token, user, logout }) => {
   const [files, setFiles] = useState([]);
+  const [isGDriveConnected, setIsGDriveConnected] = useState(false); // NEW STATE
+  const [isCheckingDrive, setIsCheckingDrive] = useState(true);
 
   useEffect(() => {
     setupLocalRSAKeys().catch(err => console.error("Key Setup Failed:", err));
   }, []);
 
-  const fetchFiles = useCallback(async () => {
+  const fetchData = useCallback(async () => {
     try {
-      const res = await axios.get('http://localhost:5000/myfiles', { headers: { Authorization: `Bearer ${token}` } });
-      setFiles(res.data);
-    } catch (err) { console.error("Fetch error:", err); }
+      // Fetch files
+      const filesRes = await axios.get('http://localhost:5000/myfiles', { headers: { Authorization: `Bearer ${token}` } });
+      setFiles(filesRes.data);
+      
+      // Fetch Drive Connection Status
+      const driveRes = await axios.get('http://localhost:5000/user/connections', { headers: { Authorization: `Bearer ${token}` } });
+      setIsGDriveConnected(driveRes.data.gdriveConnected);
+    } catch (err) { 
+      console.error("Fetch error:", err); 
+    } finally {
+      setIsCheckingDrive(false);
+    }
   }, [token]);
 
-  useEffect(() => { fetchFiles(); }, [fetchFiles]);
+  useEffect(() => { fetchData(); }, [fetchData])
 
   const handleDelete = async (fileId) => {
     if (!window.confirm("Let this memory return to the earth? (Permanently delete)")) return;
@@ -64,8 +76,22 @@ const Dashboard = ({ token, user, logout }) => {
         </div>
         <Button variant="outline" onClick={logout}>Depart</Button>
       </header>
-      <KeyManager onKeysRestored={fetchFiles} />
-      <FileUpload token={token} refreshFiles={fetchFiles} />
+
+      <KeyManager onKeysRestored={fetchData} />
+      
+      {/* Pass the state to StorageConnections */}
+      <StorageConnections 
+        token={token} 
+        isConnected={isGDriveConnected} 
+        isLoading={isCheckingDrive} 
+      />
+
+      {/* Pass the state to FileUpload so it can lock itself! */}
+      <FileUpload 
+        token={token} 
+        refreshFiles={fetchData} 
+        isConnected={isGDriveConnected} 
+      />
       
       <div className="mt-16">
         <h3 className="text-3xl font-serif text-foreground mb-8">Your Library</h3>
