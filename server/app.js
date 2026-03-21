@@ -390,5 +390,8 @@ const mergeChunks = async (fileName, totalChunks, userId, encryptedKey, iv, refr
         throw err; // Pass error up to be caught by the upload route
     }
 };
+app.get('/ping', (req, res) => {
+    res.status(200).json({ message: "Sanctuary is awake!" });
+});
 
 app.listen(PORT, () => console.log(`🚀 Server running on http://localhost:${PORT}`));

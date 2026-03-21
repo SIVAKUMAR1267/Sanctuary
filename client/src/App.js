@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import Navigation from './components/Navigation';
+import ServerWakeup from './components/ServerWakeup';
 import Home from './components/Home';
 import Login from './components/Login';
 import Register from './components/Register';
@@ -40,45 +41,47 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen relative overflow-x-hidden">
-      
-      {/* The persistent navigation bar */}
-      <Navigation user={user} logout={handleLogout} />
-      
-      {/* The content area */}
-      <div className="pt-24">
-        <Routes>
-          <Route path="/" element={<div className="page-transition"><Home /></div>} />
-          
-          <Route 
-            path="/login" 
-            element={
-              <div className="page-transition">
-                {/* Match the new prop name we just created! */}
-                <Login onLoginSuccess={handleLoginSuccess} />
-              </div>
-            } 
-          />
-          
-          <Route path="/register" element={<div className="page-transition"><Register /></div>} />
-          
-          <Route 
-            path="/dashboard" 
-            element={
-              <ProtectedRoute>
+    /* EVERYTHING is now safely held inside the ServerWakeup waiting room */
+    <ServerWakeup>
+      <div className="min-h-screen relative overflow-x-hidden">
+        
+        {/* The persistent navigation bar */}
+        <Navigation user={user} logout={handleLogout} />
+        
+        {/* The content area */}
+        <div className="pt-24">
+          <Routes>
+            <Route path="/" element={<div className="page-transition"><Home /></div>} />
+            
+            <Route 
+              path="/login" 
+              element={
                 <div className="page-transition">
-                  <Dashboard token={token} user={user} logout={handleLogout} />
+                  <Login onLoginSuccess={handleLoginSuccess} />
                 </div>
-              </ProtectedRoute>
-            } 
-          />
-          
-          {/* Catch-all route for typos: redirects to home */}
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
+              } 
+            />
+            
+            <Route path="/register" element={<div className="page-transition"><Register /></div>} />
+            
+            <Route 
+              path="/dashboard" 
+              element={
+                <ProtectedRoute>
+                  <div className="page-transition">
+                    <Dashboard token={token} user={user} logout={handleLogout} />
+                  </div>
+                </ProtectedRoute>
+              } 
+            />
+            
+            {/* Catch-all route for typos: redirects to home */}
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </div>
+        
       </div>
-      
-    </div>
+    </ServerWakeup>
   );
 }
 
