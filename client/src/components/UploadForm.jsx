@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import axios from "axios";
 import { toast } from "react-toastify";
 import ProgressBar from "./ProgressBar"; 
 import FilePreview from "./FilePreview"; 
 import { generateAESKey, encryptChunk, encryptSessionKeyWithRSA } from "../utils/encryption"; 
-import { Button } from "./ui/Button"; // <-- Using our new primitive
-import { Card } from "./ui/Card";     // <-- Using our new primitive
+import { Button } from "./ui/Button";
+import { Card } from "./ui/Card";
+import api from '../api';
 
 const CHUNK_SIZE = 1024 * 1024; // 1MB
 const CONCURRENCY = 3;
@@ -54,8 +54,8 @@ const UploadForm = () => {
           
           if (index === 0) formData.append("passwordHash", encryptedSessionKey);
 
-          await axios.post("http://localhost:5000/upload", formData);
-          
+          await api.post('/upload', formData);
+
           chunksUploaded++;
           setProgress(Math.round((chunksUploaded / totalChunks) * 100));
         }

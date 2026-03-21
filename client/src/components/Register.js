@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import { Button } from '../ui/Button'; 
 import { Card } from '../ui/Card';
+import api from '../api';
 
 const Register = ({ onNavigateToLogin }) => {
   const [username, setUsername] = useState('');
@@ -35,7 +35,7 @@ const Register = ({ onNavigateToLogin }) => {
     // --- 2. BACKEND SUBMISSION ---
     setIsLoading(true);
     try {
-      const res = await axios.post('http://localhost:5000/register', {
+      const res = await api.post('/register', {
         username,
         password
       });

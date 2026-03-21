@@ -78,7 +78,7 @@ const upload = multer({ dest: 'uploads/temp/' });
 const oauth2Client = new google.auth.OAuth2(
     process.env.GOOGLE_CLIENT_ID,
     process.env.GOOGLE_CLIENT_SECRET,
-    'http://localhost:5000/auth/google/callback'
+    process.env.BACKEND_URL + '/auth/google/callback' // <-- CHANGED
 );
 
 // 1. Get Google Login URL
@@ -107,10 +107,10 @@ app.get('/auth/google/callback', async (req, res) => {
         }
 
         await UserModel.findByIdAndUpdate(userId, { $set: updateData });
-        res.redirect('http://localhost:3000/dashboard?gdrive=success');
+        res.redirect(`${process.env.FRONTEND_URL}/dashboard?gdrive=success`);;
     } catch (error) {
         console.error("OAuth Error:", error);
-        res.redirect('http://localhost:3000/dashboard?gdrive=error');
+        res.redirect(`${process.env.FRONTEND_URL}/dashboard?gdrive=error`);
     }
 });
 

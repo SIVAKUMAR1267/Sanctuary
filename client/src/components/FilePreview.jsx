@@ -1,5 +1,6 @@
 import React from 'react';
 
+
 const FilePreview = ({ file }) => {
   return (
     <div className="mt-6 p-5 bg-muted/30 border border-border/50 rounded-[1.5rem] flex items-center justify-between shadow-soft transition-all duration-300 hover:shadow-float">

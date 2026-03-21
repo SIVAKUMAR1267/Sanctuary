@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { toast } from "react-toastify";
 import { Button } from "../ui/Button"; // <-- Import our shared primitive
-
+import api from '../api';
 const FileList = ({ user }) => {
   const [files, setFiles] = useState([]);
 
   const fetchFiles = async () => {
     try {
-      const res = await axios.get(`http://localhost:5000/my-files?user=${user}`);
+      const res = await api.get(`/my-files?user=${user}`);
       setFiles(res.data);
     } catch (err) { console.error(err); }
   };
@@ -16,14 +15,14 @@ const FileList = ({ user }) => {
   useEffect(() => { fetchFiles(); }, [user]);
 
   const handleDownload = (id, fileName) => {
-    window.open(`http://localhost:5000/download/${id}`, "_blank");
+    window.open(`/download/${id}`, "_blank");
   };
 
   const handleDelete = async (id) => {
     if(!window.confirm("Let this memory return to the earth?")) return;
     
     try {
-      await axios.delete(`http://localhost:5000/files/${id}`);
+      await api.delete(`/files/${id}`);
       toast.success("File returned to earth.");
       fetchFiles(); 
     } catch (err) {

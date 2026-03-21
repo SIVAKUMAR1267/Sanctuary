@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
+import api from '../api';
 
 // 1. We correctly accept onLoginSuccess here
 const Login = ({ onLoginSuccess }) => {
@@ -19,7 +19,7 @@ const Login = ({ onLoginSuccess }) => {
     setIsLoading(true);
     
     try {
-      const res = await axios.post('http://localhost:5000/login', formData);
+      const res = await api.post('/login', formData);
       
       // 3. We pass BOTH the token and username up to App.js
       onLoginSuccess(res.data.token, res.data.username);

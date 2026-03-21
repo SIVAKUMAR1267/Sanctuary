@@ -1,11 +1,11 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import axios from 'axios';
 import FileUpload from './FileUpload';
 import StorageConnections from './StorageConnections';
 import KeyManager from './Keymanager';
 import { decryptFile, setupLocalRSAKeys } from '../utils/encryption';
 import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
+import api from '../api';
 
 const Dashboard = ({ token, user, logout }) => {
   const [files, setFiles] = useState([]);
@@ -19,11 +19,11 @@ const Dashboard = ({ token, user, logout }) => {
   const fetchData = useCallback(async () => {
     try {
       // Fetch files
-      const filesRes = await axios.get('http://localhost:5000/myfiles', { headers: { Authorization: `Bearer ${token}` } });
+      const filesRes = await api.get('/myfiles', { headers: { Authorization: `Bearer ${token}` } });
       setFiles(filesRes.data);
       
       // Fetch Drive Connection Status
-      const driveRes = await axios.get('http://localhost:5000/user/connections', { headers: { Authorization: `Bearer ${token}` } });
+      const driveRes = await api.get('/user/connections', { headers: { Authorization: `Bearer ${token}` } });
       setIsGDriveConnected(driveRes.data.gdriveConnected);
     } catch (err) { 
       console.error("Fetch error:", err); 
@@ -37,7 +37,7 @@ const Dashboard = ({ token, user, logout }) => {
   const handleDelete = async (fileId) => {
     if (!window.confirm("Let this memory return to the earth? (Permanently delete)")) return;
     try {
-      await axios.delete(`http://localhost:5000/delete/${fileId}`, { headers: { Authorization: `Bearer ${token}` } });
+      await api.delete(`/delete/${fileId}`, { headers: { Authorization: `Bearer ${token}` } });
       setFiles(current => current.filter(f => f._id !== fileId));
     } catch (err) { alert("Delete failed"); }
   };
@@ -45,10 +45,10 @@ const Dashboard = ({ token, user, logout }) => {
   const handleDownload = async (fileId, fileName) => {
      /* ... existing download/decrypt logic remains untouched ... */
      try {
-      const fileRes = await axios.get(`http://localhost:5000/download/${fileId}`, {
+      const fileRes = await api.get(`/download/${fileId}`, {
         headers: { Authorization: `Bearer ${token}` }, responseType: 'blob'
       });
-      const metaRes = await axios.get(`http://localhost:5000/request-file-metadata/${fileId}`, {
+      const metaRes = await api.get(`/request-file-metadata/${fileId}`, {
          headers: { Authorization: `Bearer ${token}` }
       });
       

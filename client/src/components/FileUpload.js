@@ -1,9 +1,9 @@
 import React, { useState, useRef } from 'react';
-import axios from 'axios';
 import { Lock } from 'lucide-react';
 import { startEncryptionSession, encryptChunk, calculateFileHash } from '../utils/encryption';
 import { Button } from '../ui/Button';
 import { Card } from '../ui/Card';
+import api from '../api';
 
 const FileUpload = ({ token, refreshFiles, isConnected }) => {
   // 1. STATE VARIABLES (These were missing in your file!)
@@ -41,7 +41,7 @@ const FileUpload = ({ token, refreshFiles, isConnected }) => {
         
         try {
           const fileHash = await calculateFileHash(selectedFile);
-          const scanRes = await axios.post('http://localhost:5000/scan-file', { fileHash }, {
+          const scanRes = await api.post('/scan-file', { fileHash }, {
             headers: { Authorization: `Bearer ${token}` }
           });
           if (scanRes.data.data?.attributes?.last_analysis_stats?.malicious > 0) {
@@ -95,7 +95,7 @@ const FileUpload = ({ token, refreshFiles, isConnected }) => {
         formData.append('passwordHash', encryptedKey); 
         formData.append('salt', window.btoa(String.fromCharCode(...iv))); 
 
-        await axios.post('http://localhost:5000/upload', formData, {
+        await api.post('/upload', formData, {
           headers: { Authorization: `Bearer ${token}` }
         });
         

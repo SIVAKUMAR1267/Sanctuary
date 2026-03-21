@@ -1,13 +1,13 @@
 import React from 'react';
-import axios from 'axios';
 import { Cloud, CheckCircle2 } from 'lucide-react';
 import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
+import api from '../api';
 
 const StorageConnections = ({ token, isConnected, isLoading }) => {
   const handleConnectGoogle = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/auth/google/url', {
+      const res = await api.get('/auth/google/url', {
         headers: { Authorization: `Bearer ${token}` }
       });
       window.location.href = res.data.url;
