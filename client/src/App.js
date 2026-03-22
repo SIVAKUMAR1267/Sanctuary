@@ -9,10 +9,8 @@ import Register from './components/Register';
 import Dashboard from './components/Dashboard';
 
 function App() {
-  // It is now safe to use this because App is wrapped by BrowserRouter in index.js!
   const navigate = useNavigate(); 
 
-  // Read from localStorage on initial load so refreshes don't log you out
   const [token, setToken] = useState(() => localStorage.getItem('authToken'));
   const [user, setUser] = useState(() => localStorage.getItem('authUser'));
 
@@ -21,7 +19,7 @@ function App() {
     localStorage.removeItem('authUser');
     setToken(null);
     setUser(null);
-    navigate('/'); // Glide smoothly back to the home page
+    navigate('/'); 
   };
 
   const handleLoginSuccess = (newToken, username) => {
@@ -29,10 +27,10 @@ function App() {
     localStorage.setItem('authUser', username);
     setToken(newToken);
     setUser(username);
-    navigate('/dashboard'); // Glide smoothly to the dashboard
+    navigate('/dashboard'); 
   };
 
-  // A helper component to protect the /dashboard route
+  // Guard 1: Protects the Dashboard from unauthenticated users
   const ProtectedRoute = ({ children }) => {
     if (!token) {
       return <Navigate to="/login" replace />;
@@ -40,31 +38,50 @@ function App() {
     return children;
   };
 
+  // Guard 2: Protects Login/Register pages from users who are already logged in
+  const PublicRoute = ({ children }) => {
+    if (token) {
+      return <Navigate to="/dashboard" replace />;
+    }
+    return children;
+  };
+
   return (
-    /* EVERYTHING is now safely held inside the ServerWakeup waiting room */
     <ServerWakeup>
-      {/* We added bg-background to force the entire app to use the off-white color! */}
-<div className="min-h-screen relative overflow-x-hidden bg-background">
+      {/* We removed pt-24 here earlier, and ensured bg-background covers the whole app */}
+      <div className="min-h-screen relative overflow-x-hidden bg-background">
         
-        {/* The persistent navigation bar */}
         <Navigation user={user} logout={handleLogout} />
         
-        {/* The content area */}
         <div className="w-full">
           <Routes>
             <Route path="/" element={<div className="page-transition"><Home /></div>} />
             
+            {/* Wrapped Login in PublicRoute */}
             <Route 
               path="/login" 
               element={
-                <div className="page-transition">
-                  <Login onLoginSuccess={handleLoginSuccess} />
-                </div>
+                <PublicRoute>
+                  <div className="page-transition">
+                    <Login onLoginSuccess={handleLoginSuccess} />
+                  </div>
+                </PublicRoute>
               } 
             />
             
-            <Route path="/register" element={<div className="page-transition"><Register /></div>} />
+            {/* Wrapped Register in PublicRoute */}
+            <Route 
+              path="/register" 
+              element={
+                <PublicRoute>
+                  <div className="page-transition">
+                    <Register />
+                  </div>
+                </PublicRoute>
+              } 
+            />
             
+            {/* Dashboard remains wrapped in ProtectedRoute */}
             <Route 
               path="/dashboard" 
               element={
@@ -76,7 +93,6 @@ function App() {
               } 
             />
             
-            {/* Catch-all route for typos: redirects to home */}
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </div>
