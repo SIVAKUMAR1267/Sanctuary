@@ -393,5 +393,9 @@ const mergeChunks = async (fileName, totalChunks, userId, encryptedKey, iv, refr
 app.get('/ping', (req, res) => {
     res.status(200).json({ message: "Sanctuary is awake!" });
 });
+app.use(cors({
+  origin: [process.env.FRONTEND_URL],
+  credentials: true
+}));
 
 app.listen(PORT, () => console.log(`🚀 Server running on http://localhost:${PORT}`));
