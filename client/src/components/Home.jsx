@@ -1,5 +1,5 @@
 import React from 'react';
-import { Leaf, Shield, Wind, Sparkles, Key, Lock, Database, ArrowRight } from 'lucide-react';
+import { Leaf, Shield, Wind, Sparkles, Key, Lock, Database, ArrowRight, Mail, Github, Linkedin } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../ui/Button';
 import { Card } from '../ui/Card';
@@ -10,14 +10,17 @@ const Home = () => {
   return (
     <div className="min-h-screen relative overflow-hidden selection:bg-primary/20">
       
-     
+      {/* --- AMBIENT BLOBS (The Wabi-Sabi Atmosphere) --- */}
+      <div className="absolute top-0 left-0 w-[80vw] max-w-[800px] h-[600px] bg-primary/10 rounded-blob-1 blur-[100px] -translate-x-1/3 -translate-y-1/4 pointer-events-none"></div>
+      <div className="absolute top-[30%] right-0 w-[70vw] max-w-[600px] h-[800px] bg-secondary/10 rounded-blob-2 blur-[100px] translate-x-1/3 pointer-events-none"></div>
+
       <main className="relative z-10 pt-20 pb-32 md:pt-32">
         
         {/* --- SECTION 1: HERO --- */}
-        <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 mb-32 md:mb-48">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary font-sans text-sm font-bold mb-8 shadow-sm">
+        <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 mb-32 md:mb-48 relative">
+          <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/60 backdrop-blur-md border border-border/50 text-primary font-sans text-sm font-bold mb-8 shadow-sm transition-transform hover:scale-105">
             <Sparkles size={16} />
-            <span>Absolute privacy, naturally.</span>
+            <span className="tracking-wide">Absolute privacy, naturally.</span>
           </div>
           
           <h1 className="text-5xl md:text-7xl font-serif text-foreground leading-tight tracking-tight mb-8">
@@ -42,32 +45,33 @@ const Home = () => {
         </div>
 
         {/* --- SECTION 2: HOW IT WORKS (The Journey) --- */}
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mb-32 md:mb-48">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-serif text-foreground mb-4">The Natural Order</h2>
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mb-32 md:mb-48 relative">
+          <div className="text-center mb-20">
+            <h2 className="text-4xl md:text-5xl font-serif text-foreground mb-4 tracking-tight">The Natural Order</h2>
             <p className="text-muted-foreground font-sans text-lg">How we protect your files without ever seeing them.</p>
           </div>
 
-          <div className="space-y-24">
+          <div className="space-y-24 md:space-y-32 relative">
+            
             {/* Step 1 */}
-            <div className="flex flex-col md:flex-row items-center gap-12">
+            <div className="flex flex-col md:flex-row items-center gap-12 group">
               <div className="flex-1 md:text-right order-2 md:order-1">
                 <h3 className="text-3xl font-serif text-foreground mb-4">1. The Seed is Sown</h3>
                 <p className="text-muted-foreground font-sans leading-relaxed text-lg">
                   When you enter the sanctuary, your browser generates a unique cryptographic keypair. This "seed" never leaves your device. We have zero knowledge of it.
                 </p>
               </div>
-              <div className="flex-1 order-1 md:order-2 flex justify-center md:justify-start">
-                <div className="w-32 h-32 md:w-48 md:h-48 rounded-[30%_70%_70%_30%_/_30%_30%_70%_70%] bg-primary/10 border-2 border-primary/20 flex items-center justify-center shadow-soft transform -rotate-2">
+              <div className="flex-1 order-1 md:order-2 flex justify-center md:justify-start relative">
+                <div className="w-40 h-40 md:w-56 md:h-56 rounded-[30%_70%_70%_30%_/_30%_30%_70%_70%] bg-white/60 backdrop-blur-sm border-2 border-primary/20 flex items-center justify-center shadow-soft transform -rotate-2 transition-all duration-700 group-hover:rotate-0 group-hover:scale-105 group-hover:bg-primary/5">
                   <Key size={48} className="text-primary" />
                 </div>
               </div>
             </div>
 
             {/* Step 2 */}
-            <div className="flex flex-col md:flex-row items-center gap-12">
+            <div className="flex flex-col md:flex-row items-center gap-12 group">
               <div className="flex-1 flex justify-center md:justify-end">
-                <div className="w-32 h-32 md:w-48 md:h-48 rounded-[60%_40%_30%_70%_/_60%_30%_70%_40%] bg-secondary/10 border-2 border-secondary/20 flex items-center justify-center shadow-soft transform rotate-3">
+                <div className="w-40 h-40 md:w-56 md:h-56 rounded-[60%_40%_30%_70%_/_60%_30%_70%_40%] bg-white/60 backdrop-blur-sm border-2 border-secondary/20 flex items-center justify-center shadow-float transform rotate-3 transition-all duration-700 group-hover:rotate-0 group-hover:scale-105 group-hover:bg-secondary/5">
                   <Lock size={48} className="text-secondary" />
                 </div>
               </div>
@@ -80,7 +84,7 @@ const Home = () => {
             </div>
 
             {/* Step 3 */}
-            <div className="flex flex-col md:flex-row items-center gap-12">
+            <div className="flex flex-col md:flex-row items-center gap-12 group">
               <div className="flex-1 md:text-right order-2 md:order-1">
                 <h3 className="text-3xl font-serif text-foreground mb-4">3. Safely Planted</h3>
                 <p className="text-muted-foreground font-sans leading-relaxed text-lg">
@@ -88,7 +92,7 @@ const Home = () => {
                 </p>
               </div>
               <div className="flex-1 order-1 md:order-2 flex justify-center md:justify-start">
-                <div className="w-32 h-32 md:w-48 md:h-48 rounded-[40%_60%_70%_30%_/_40%_50%_60%_50%] bg-muted border-2 border-border/50 flex items-center justify-center shadow-soft transform -rotate-1">
+                <div className="w-40 h-40 md:w-56 md:h-56 rounded-[40%_60%_70%_30%_/_40%_50%_60%_50%] bg-white/60 backdrop-blur-sm border-2 border-border/50 flex items-center justify-center shadow-soft transform -rotate-1 transition-all duration-700 group-hover:rotate-0 group-hover:scale-105 group-hover:bg-muted/50">
                   <Database size={48} className="text-foreground" />
                 </div>
               </div>
@@ -99,9 +103,10 @@ const Home = () => {
         {/* --- SECTION 3: CORE PHILOSOPHY CARDS --- */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-32 md:mb-48">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <Card asymmetric className="group hover:-translate-y-2 transition-transform duration-500">
-              <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-6 group-hover:bg-primary group-hover:text-white transition-colors duration-500 text-primary">
-                <Shield size={28} />
+            <Card asymmetric className="group cursor-default">
+              {/* Note the perfectly styled h-14 w-14 rounded-2xl container from the design system */}
+              <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-6 transition-all duration-500 group-hover:bg-primary group-hover:scale-110 group-hover:-rotate-3">
+                <Shield size={28} className="text-primary transition-colors duration-500 group-hover:text-primary-foreground" />
               </div>
               <h3 className="text-2xl font-serif text-foreground mb-3">Absolute Silence</h3>
               <p className="text-muted-foreground font-sans leading-relaxed">
@@ -109,9 +114,9 @@ const Home = () => {
               </p>
             </Card>
 
-            <Card className="group hover:-translate-y-2 transition-transform duration-500">
-              <div className="w-14 h-14 rounded-2xl bg-secondary/10 flex items-center justify-center mb-6 group-hover:bg-secondary group-hover:text-white transition-colors duration-500 text-secondary">
-                <Leaf size={28} />
+            <Card className="group cursor-default">
+              <div className="w-14 h-14 rounded-2xl bg-secondary/10 flex items-center justify-center mb-6 transition-all duration-500 group-hover:bg-secondary group-hover:scale-110 group-hover:rotate-3">
+                <Leaf size={28} className="text-secondary transition-colors duration-500 group-hover:text-secondary-foreground" />
               </div>
               <h3 className="text-2xl font-serif text-foreground mb-3">The Sanctuary Seed</h3>
               <p className="text-muted-foreground font-sans leading-relaxed">
@@ -119,9 +124,9 @@ const Home = () => {
               </p>
             </Card>
 
-            <Card asymmetric className="group hover:-translate-y-2 transition-transform duration-500">
-              <div className="w-14 h-14 rounded-2xl bg-muted text-foreground flex items-center justify-center mb-6 group-hover:bg-foreground group-hover:text-white transition-colors duration-500">
-                <Wind size={28} />
+            <Card asymmetric className="group cursor-default">
+              <div className="w-14 h-14 rounded-2xl bg-border flex items-center justify-center mb-6 transition-all duration-500 group-hover:bg-foreground group-hover:scale-110 group-hover:-rotate-3">
+                <Wind size={28} className="text-foreground transition-colors duration-500 group-hover:text-background" />
               </div>
               <h3 className="text-2xl font-serif text-foreground mb-3">Return to Earth</h3>
               <p className="text-muted-foreground font-sans leading-relaxed">
@@ -133,20 +138,18 @@ const Home = () => {
 
         {/* --- SECTION 4: FINAL CTA (Deep Grounding Color) --- */}
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-primary rounded-[3rem] p-12 md:p-20 text-center relative overflow-hidden shadow-float">
-            {/* Subtle texture inside the CTA */}
-            <div className="absolute inset-0 opacity-[0.05] mix-blend-multiply pointer-events-none bg-[url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E')]" />
+          {/* We wrap the CTA in our rounded-blob-1 utility for an organic shape instead of a perfect rectangle */}
+          <div className="bg-primary rounded-blob-1 p-12 md:p-24 text-center relative overflow-hidden shadow-float transition-transform duration-700 hover:scale-[1.02]">
             
-            <h2 className="text-4xl md:text-5xl font-serif text-primary-foreground mb-6 relative z-10">
+            <h2 className="text-4xl md:text-5xl font-serif text-primary-foreground mb-6 relative z-10 tracking-tight">
               Ready to plant your roots?
             </h2>
-            <p className="text-primary-foreground/80 font-sans text-lg md:text-xl max-w-2xl mx-auto mb-10 relative z-10">
+            <p className="text-primary-foreground/90 font-sans text-lg md:text-xl max-w-2xl mx-auto mb-10 relative z-10 leading-relaxed">
               Join the sanctuary today. Experience military-grade cryptography wrapped in natural tranquility.
             </p>
             <Button 
-              variant='outline'
               size="lg" 
-              className="bg-white text-primary hover:bg-white/90 shadow-soft relative z-10"
+              className="!bg-white !text-primary hover:bg-white/90 shadow-soft relative z-10 hover:shadow-float"
               onClick={() => navigate('/register')}
             >
               Get Started <ArrowRight size={20} className="ml-2" />
@@ -156,10 +159,46 @@ const Home = () => {
 
       </main>
 
-      {/* --- SIMPLE FOOTER --- */}
-      <footer className="relative z-10 border-t border-border/50 bg-[#FEFEFA]/50 py-12 mt-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center flex flex-col items-center">
-          <div className="w-8 h-8 bg-primary/20 text-primary rounded-full flex items-center justify-center mb-4">
+      {/* --- FOOTER & CONTACT SECTION --- */}
+      <footer className="relative z-10 border-t border-border/50 bg-[#FEFEFA]/50 py-12 mt-32">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center">
+          
+          <section className="py-12 px-6 relative z-10 flex flex-col items-center justify-center w-full">
+            <div className="text-center mb-10">
+              <h2 className="text-3xl md:text-4xl font-serif font-bold mb-4 tracking-tight text-foreground">
+                Meet the Creator
+              </h2>
+              <p className="text-base text-muted-foreground max-w-md mx-auto leading-relaxed font-sans">
+                I built Sanctuary to explore zero-knowledge architecture and elegant web design. I'm always open to discussing new projects and opportunities.
+              </p>
+            </div>
+
+            <div className="bg-white/60 backdrop-blur-md border border-border/50 rounded-[2rem] p-8 md:p-10 shadow-soft w-full max-w-2xl flex flex-col items-center transition-all duration-500 hover:-translate-y-1 hover:shadow-float">
+              <h3 className="text-2xl font-serif font-semibold mb-1 text-foreground">
+                Sivakumar R
+              </h3>
+              <p className="text-sm font-bold uppercase tracking-wider text-primary mb-8 font-sans">
+                Full Stack Developer
+              </p>
+
+              <div className="flex flex-wrap justify-center gap-4 w-full">
+                <a href="mailto:rsivakumar1205o@gmail.com" className="flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-full hover:bg-primary/90 transition-all duration-300 active:scale-95 shadow-soft">
+                  <Mail size={18} />
+                  <span className="font-sans font-bold">Email Me</span>
+                </a>
+                <a href="https://github.com/SIVAKUMAR1267" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-6 py-3 bg-white border-2 border-border text-foreground rounded-full hover:border-primary hover:text-primary transition-all duration-300 active:scale-95">
+                  <Github size={18} />
+                  <span className="font-sans font-bold">GitHub</span>
+                </a>
+                <a href="https://www.linkedin.com/in/sivakumar-r-webdev/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-6 py-3 bg-white border-2 border-border text-foreground rounded-full hover:border-primary hover:text-primary transition-all duration-300 active:scale-95">
+                  <Linkedin size={18} />
+                  <span className="font-sans font-bold">LinkedIn</span>
+                </a>
+              </div>
+            </div>
+          </section>
+
+          <div className="w-8 h-8 bg-primary/20 text-primary rounded-full flex items-center justify-center mb-4 mt-12">
             <Leaf size={16} />
           </div>
           <p className="text-muted-foreground font-sans text-sm">
@@ -167,6 +206,7 @@ const Home = () => {
           </p>
         </div>
       </footer>
+      
     </div>
   );
 };

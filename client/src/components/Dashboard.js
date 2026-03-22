@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
+import { FileText, Sprout } from 'lucide-react'; // Added natural icons!
 import FileUpload from './FileUpload';
 import StorageConnections from './StorageConnections';
 import KeyManager from './Keymanager';
@@ -9,7 +10,7 @@ import api from '../api';
 
 const Dashboard = ({ token, user, logout }) => {
   const [files, setFiles] = useState([]);
-  const [isGDriveConnected, setIsGDriveConnected] = useState(false); // NEW STATE
+  const [isGDriveConnected, setIsGDriveConnected] = useState(false);
   const [isCheckingDrive, setIsCheckingDrive] = useState(true);
 
   useEffect(() => {
@@ -18,11 +19,9 @@ const Dashboard = ({ token, user, logout }) => {
 
   const fetchData = useCallback(async () => {
     try {
-      // Fetch files
       const filesRes = await api.get('/myfiles', { headers: { Authorization: `Bearer ${token}` } });
       setFiles(filesRes.data);
       
-      // Fetch Drive Connection Status
       const driveRes = await api.get('/user/connections', { headers: { Authorization: `Bearer ${token}` } });
       setIsGDriveConnected(driveRes.data.gdriveConnected);
     } catch (err) { 
@@ -43,7 +42,6 @@ const Dashboard = ({ token, user, logout }) => {
   };
 
   const handleDownload = async (fileId, fileName) => {
-     /* ... existing download/decrypt logic remains untouched ... */
      try {
       const fileRes = await api.get(`/download/${fileId}`, {
         headers: { Authorization: `Bearer ${token}` }, responseType: 'blob'
@@ -68,58 +66,98 @@ const Dashboard = ({ token, user, logout }) => {
   };
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-12 md:py-24">
-      <header className="flex flex-col md:flex-row justify-between items-center mb-16 gap-6">
-        <div>
-          <h2 className="text-5xl text-foreground font-serif tracking-tight">Welcome, {user}</h2>
-          <p className="text-muted-foreground font-sans mt-2">Your sanctuary of secure files.</p>
-        </div>
-        <Button variant="outline" onClick={logout}>Depart</Button>
-      </header>
-
-      <KeyManager onKeysRestored={fetchData} />
+    <div className="min-h-screen relative overflow-hidden">
       
-      {/* Pass the state to StorageConnections */}
-      <StorageConnections 
-        token={token} 
-        isConnected={isGDriveConnected} 
-        isLoading={isCheckingDrive} 
-      />
+      {/* --- AMBIENT BLOBS (The Wabi-Sabi Atmosphere) --- */}
+      <div className="absolute top-[-10%] left-[-10%] w-[50vw] max-w-[500px] h-[500px] bg-secondary/10 rounded-blob-1 blur-[100px] pointer-events-none z-0"></div>
+      <div className="absolute bottom-[-10%] right-[-10%] w-[60vw] max-w-[600px] h-[600px] bg-primary/10 rounded-blob-2 blur-[100px] pointer-events-none z-0"></div>
 
-      {/* Pass the state to FileUpload so it can lock itself! */}
-      <FileUpload 
-        token={token} 
-        refreshFiles={fetchData} 
-        isConnected={isGDriveConnected} 
-      />
-      
-      <div className="mt-16">
-        <h3 className="text-3xl font-serif text-foreground mb-8">Your Library</h3>
+      {/* Main Content Wrapper */}
+      <div className="max-w-5xl mx-auto px-4 py-12 md:py-24 relative z-10">
         
-        {files.length === 0 ? (
-          <p className="text-muted-foreground italic text-lg">Your library is currently empty. Plant a new file above.</p>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {files.map((file, index) => (
-              <Card key={file._id} asymmetric={index % 2 === 0} className="flex flex-col justify-between !p-6">
-                <div className="mb-6">
-                  <span className="font-sans font-bold text-lg text-foreground block truncate" title={file.originalName}>
-                    {file.originalName}
-                  </span>
-                </div>
-                
-                <div className="flex gap-3 mt-auto">
-                  <Button size="sm" onClick={() => handleDownload(file._id, file.originalName)} className="flex-1">
-                    Retrieve
-                  </Button>
-                  <Button variant="outline" size="sm" onClick={() => handleDelete(file._id)} className="!border-destructive !text-destructive hover:!bg-destructive/10">
-                    Burn
-                  </Button>
-                </div>
-              </Card>
-            ))}
+        {/* Header Section */}
+        <header className="flex flex-col md:flex-row justify-between items-start md:items-center mb-16 gap-6">
+          <div>
+            <h2 className="text-5xl md:text-6xl text-foreground font-serif tracking-tight">
+              Welcome, <span className="text-primary italic">{user}</span>
+            </h2>
+            <p className="text-lg text-muted-foreground font-sans mt-3 leading-relaxed">
+              Your sanctuary of secure files.
+            </p>
           </div>
-        )}
+          <Button variant="outline" onClick={logout} className="!border-border hover:!border-destructive hover:!text-destructive hover:!bg-destructive/10">
+            Depart
+          </Button>
+        </header>
+
+        {/* Configuration Sections */}
+        <div className="space-y-8 mb-16">
+          <KeyManager onKeysRestored={fetchData} />
+          <StorageConnections 
+            token={token} 
+            isConnected={isGDriveConnected} 
+            isLoading={isCheckingDrive} 
+          />
+        </div>
+
+        {/* Upload Section */}
+        <FileUpload 
+          token={token} 
+          refreshFiles={fetchData} 
+          isConnected={isGDriveConnected} 
+        />
+        
+        {/* Library Section */}
+        <div className="mt-24">
+          <div className="flex items-center gap-4 mb-10">
+            <h3 className="text-3xl md:text-4xl font-serif text-foreground tracking-tight">Your Library</h3>
+            <div className="h-px bg-border/50 flex-1 mt-2"></div>
+          </div>
+          
+          {files.length === 0 ? (
+            /* Beautiful Empty State */
+            <div className="flex flex-col items-center justify-center py-20 px-6 border-2 border-dashed border-border/50 rounded-[3rem] bg-white/30 backdrop-blur-sm">
+              <div className="w-20 h-20 bg-primary/10 text-primary rounded-full flex items-center justify-center mb-6 shadow-sm">
+                <Sprout size={40} />
+              </div>
+              <h4 className="text-2xl font-serif text-foreground mb-3">The soil is ready.</h4>
+              <p className="text-muted-foreground font-sans text-center max-w-md leading-relaxed">
+                Your library is currently empty. Plant a new file in the sanctuary above to watch your secure memory grow.
+              </p>
+            </div>
+          ) : (
+            /* The File Grid */
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {files.map((file, index) => (
+                <Card key={file._id} asymmetric={index % 2 === 0} className="flex flex-col justify-between group">
+                  <div className="mb-8 flex items-start gap-4">
+                    <div className="w-12 h-12 bg-muted rounded-2xl flex items-center justify-center text-muted-foreground group-hover:bg-primary/10 group-hover:text-primary transition-colors duration-500 shrink-0">
+                      <FileText size={24} />
+                    </div>
+                    <div className="overflow-hidden">
+                      <h4 className="font-serif font-semibold text-xl text-foreground truncate" title={file.originalName}>
+                        {file.originalName}
+                      </h4>
+                      <p className="text-sm font-sans text-muted-foreground mt-1 uppercase tracking-wider font-bold">
+                        Encrypted Memory
+                      </p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex gap-4 mt-auto">
+                    <Button size="sm" onClick={() => handleDownload(file._id, file.originalName)} className="flex-1 shadow-sm">
+                      Retrieve
+                    </Button>
+                    <Button variant="outline" size="sm" onClick={() => handleDelete(file._id)} className="!border-border hover:!border-destructive hover:!text-destructive hover:!bg-destructive/10 px-6">
+                      Burn
+                    </Button>
+                  </div>
+                </Card>
+              ))}
+            </div>
+          )}
+        </div>
+
       </div>
     </div>
   );

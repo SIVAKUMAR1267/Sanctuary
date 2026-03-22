@@ -43,13 +43,14 @@ function App() {
   return (
     /* EVERYTHING is now safely held inside the ServerWakeup waiting room */
     <ServerWakeup>
-      <div className="min-h-screen relative overflow-x-hidden">
+      {/* We added bg-background to force the entire app to use the off-white color! */}
+<div className="min-h-screen relative overflow-x-hidden bg-background">
         
         {/* The persistent navigation bar */}
         <Navigation user={user} logout={handleLogout} />
         
         {/* The content area */}
-        <div className="pt-24">
+        <div className="w-full">
           <Routes>
             <Route path="/" element={<div className="page-transition"><Home /></div>} />
             

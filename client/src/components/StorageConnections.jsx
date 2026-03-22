@@ -19,29 +19,34 @@ const StorageConnections = ({ token, isConnected, isLoading }) => {
   if (isLoading) return null;
 
   return (
-    <Card className="mb-12 bg-[#FEFEFA] border-border/50">
-      <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+    // We removed the hardcoded background color so it inherits the Card's glassmorphism
+    <Card className="mb-8 relative overflow-hidden group">
+      {/* A subtle background gradient that changes when connected */}
+      <div className={`absolute inset-0 opacity-[0.03] transition-colors duration-1000 pointer-events-none ${isConnected ? 'bg-primary' : 'bg-muted'}`}></div>
+
+      <div className="flex flex-col md:flex-row items-center justify-between gap-6 relative z-10">
         
-        <div className="flex items-center gap-4 w-full md:w-auto">
-          <div className={`w-14 h-14 rounded-2xl flex items-center justify-center shadow-soft transition-colors duration-500 ${isConnected ? 'bg-primary text-white' : 'bg-muted text-muted-foreground'}`}>
+        <div className="flex items-center gap-5 w-full md:w-auto">
+          {/* The icon container matches the design system perfectly */}
+          <div className={`w-14 h-14 rounded-2xl flex items-center justify-center shadow-sm transition-all duration-500 group-hover:scale-105 ${isConnected ? 'bg-primary/10 text-primary' : 'bg-muted/50 text-muted-foreground'}`}>
             <Cloud size={28} />
           </div>
           <div>
-            <h3 className="text-xl font-serif text-foreground">Google Drive</h3>
-            <p className="text-sm font-sans text-muted-foreground mt-1">
-              Your files will be encrypted locally and planted here.
+            <h3 className="text-xl font-serif font-semibold text-foreground tracking-tight">Google Drive Canopy</h3>
+            <p className="text-sm font-sans text-muted-foreground mt-1 leading-relaxed">
+              Your files will be encrypted locally and planted safely here.
             </p>
           </div>
         </div>
 
-        <div className="w-full md:w-auto flex justify-end">
+        <div className="w-full md:w-auto flex justify-start md:justify-end">
           {isConnected ? (
-            <div className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-primary/10 text-primary font-sans font-bold text-sm">
+            <div className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-primary/10 text-primary border border-primary/20 shadow-sm transition-transform hover:-translate-y-0.5">
               <CheckCircle2 size={18} />
-              <span>Canopy Connected</span>
+              <span className="font-sans font-bold text-sm tracking-wide">Connected</span>
             </div>
           ) : (
-            <Button onClick={handleConnectGoogle} className="w-full md:w-auto">
+            <Button onClick={handleConnectGoogle} className="w-full md:w-auto shadow-sm">
               Connect to Upload
             </Button>
           )}

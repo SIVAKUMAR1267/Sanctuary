@@ -70,35 +70,35 @@ const Register = ({ onNavigateToLogin }) => {
 
         <form onSubmit={handleRegister} className="flex flex-col gap-6">
           <div className="flex flex-col gap-2">
-            <label className="text-sm font-bold text-muted-foreground uppercase tracking-wider">Username</label>
+            <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider pl-4">Password</label>
             <input 
               type="text" 
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              className="px-4 py-3 rounded-xl border-2 border-border bg-muted/20 focus:border-primary focus:outline-none transition-colors"
-              placeholder="Choose a name..."
+              className="w-full h-12 px-6 rounded-full border-2 border-border/50 bg-white/50 focus:border-primary focus:bg-white focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/20 transition-all duration-300 font-sans text-foreground placeholder:text-muted-foreground shadow-inner"
+              placeholder="Choose a name for your sanctuary..."
             />
           </div>
 
           <div className="flex flex-col gap-2">
-            <label className="text-sm font-bold text-muted-foreground uppercase tracking-wider">Password</label>
+            <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider pl-4">Password</label>
             <input 
               type="password" 
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="px-4 py-3 rounded-xl border-2 border-border bg-muted/20 focus:border-primary focus:outline-none transition-colors"
+              className="w-full h-12 px-6 rounded-full border-2 border-border/50 bg-white/50 focus:border-primary focus:bg-white focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/20 transition-all duration-300 font-sans text-foreground placeholder:text-muted-foreground shadow-inner"
               placeholder="Min 8 chars, 1 uppercase, 1 number..."
             />
           </div>
 
           {/* NEW: Confirm Password Field */}
-          <div className="flex flex-col gap-2">
-            <label className="text-sm font-bold text-muted-foreground uppercase tracking-wider">Confirm Password</label>
+         <div className="flex flex-col gap-2">
+            <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider pl-4">Confirm Password</label>
             <input 
               type="password" 
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
-              className="px-4 py-3 rounded-xl border-2 border-border bg-muted/20 focus:border-primary focus:outline-none transition-colors"
+              className="w-full h-12 px-6 rounded-full border-2 border-border/50 bg-white/50 focus:border-primary focus:bg-white focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/20 transition-all duration-300 font-sans text-foreground placeholder:text-muted-foreground shadow-inner"
               placeholder="Repeat your password..."
             />
           </div>
