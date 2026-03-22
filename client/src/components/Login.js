@@ -26,7 +26,7 @@ const Login = ({ onLoginSuccess }) => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen p-4 relative overflow-hidden">
+    <div className="flex items-center justify-center min-h-screen px-4 pt-24 pb-4 relative overflow-hidden">
       
       {/* Ambient Wabi-Sabi Blobs */}
       <div className="absolute top-[10%] left-[-10%] w-[50vw] max-w-[500px] h-[500px] bg-primary/10 rounded-blob-1 blur-[100px] pointer-events-none"></div>
